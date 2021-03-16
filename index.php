@@ -922,18 +922,14 @@
                 $a = rand(170, 173);
                 $b = rand(170, 173);
                 $c = rand(170, 173);
-                $d = rand(170, 173);
 
-                $numArr = array($a, $b, $c, $d);
+                $numArr = array($a, $b, $c);
                 $uniqueHeight = array_unique($numArr);
-                $result = count($numArr) - count($uniqueHeight);
 
-
-                if ($result > 0) {
-                    $result = $result + 1;
-                    echo "a = $a, b = $b, c = $c, d = $d. В группе $result людей с одинаковым ростом";
+                if (count($numArr) > count($uniqueHeight)) {
+                    echo "a = $a, b = $b, c = $c. В есть люди с одинаковым ростом";
                 } else {
-                    echo "a = $a, b = $b, c = $c, d = $d. В группе нет людей с одинаковым ростом";
+                    echo "a = $a, b = $b, c = $c. В группе нет людей с одинаковым ростом";
                 }
             ?>
     </div>
