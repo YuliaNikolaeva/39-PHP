@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homework-4, p-1</title>
+    <title>Homework-4, p-3</title>
     <style>
         * {
             font-family: sans-serif;
             margin: 0;
             padding: 0;
         }
+        body {
+            padding: 20px
+        }
+        
     </style>
 </head>
 <body>
@@ -44,7 +48,7 @@
 
         function addGoodToShoppingBasket($arr, $newGood){
             array_push($arr["items"], $newGood);
-            return $arr;
+            return totalSum($arr);
         }
 
 
@@ -58,7 +62,7 @@
                     unset($arr['items'][$keyGoods]);
                 }
             }
-            return $arr;
+            return totalSum($arr);
         }
 
 
@@ -74,7 +78,7 @@
                     $arr['items'][$keyGoods]['quantity'] += $quantity;
                 }
             }
-            return $arr;
+            return totalSum($arr);
         }
 
 
@@ -126,12 +130,9 @@
 
 
         $addGood = addGoodToShoppingBasket($cart, $newItem4); // Добавлен новый товар
-        $getTotalSum = totalSum($addGood); // Пересчет стоимсоти после добавления товара
-
         $changeQuantity1 = changeQuantityOfGoodItem($addGood, 2, 1); // увеличено кол-во товара на 1 для товара с id-2
-        $getTotalSum2 = totalSum($changeQuantity1); // Пересчет стоимсоти после изменения количества товара
-
-        outputArray($getTotalSum2); // Вывод корзины
+        $deleteGood = deleteGoodFromShoppingBasket($changeQuantity1, 2); // удален товар с id-2
+        outputArray($deleteGood); // Вывод корзины
     ?>
 </body>
 </html>
