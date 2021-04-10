@@ -20,21 +20,21 @@
 <body>
     <h1>ДЗ №4, часть 3, Корзина​</h1>
 
-    <?php 
-        $cart = [
-            'sum'=> 0, // Здесь было 700. Поменяла на 0
+    <?php
+        $products = [
+            2=>['name'=>'товар 1', 'price'=>100],
+            7=>['name'=>'товар 2', 'price'=>200],
+            43=>['name'=>'товар 3', 'price'=>300],
+            50=>['name'=>'товар 4', 'price'=>400],
+        ];
 
+
+        $cart = [
+            'sum'=> 0,
             'items'=> [
-                [
-                    'id'=>34,
-                    'quantity'=>2,
-                    'price'=>200
-                ],
-                [   'id'=>2,
-                    'quantity'=>5,
-                    'price'=>100
-                ]
-            ]
+                2=> ['id'=> 2,'name'=>'товар 1', 'price'=>100, 'quantity' => 1,],
+            ],
+            'errors' => [],
         ];
 
 
@@ -44,95 +44,121 @@
             echo "<pre>";
         }
 
-        //  Принимает массив корзины и массив новый товар
 
-        function addGoodToShoppingBasket($arr, $newGood){
-            array_push($arr["items"], $newGood);
-            return totalSum($arr);
-        }
-
-
-        //  Принимает массив корзины и id товара для удаления
-
-        function deleteGoodFromShoppingBasket($arr, $GoodId) {
-            foreach ($arr['items'] as $keyGoods => $goods) {
-                $GoodIdInShoppingBasket = $arr['items'][$keyGoods]['id'];
-
-                if ($GoodIdInShoppingBasket == $GoodId) {
-                    unset($arr['items'][$keyGoods]);
-                }
+        function addProduct($cart, $id, $quantity) {
+            $product = $GLOBALS['products'][$id];
+            if(!is_array($cart)) {
+                return $cart['errors']['$cart'] = 'Ошибка получения массива корзины';
             }
-            return totalSum($arr);
-        }
-
-
-        // Принимает массив корзины, id товара для изменений, количество
-        // Количество можт быть 1 или -1. Подразумевается, что добавить или удалить товар юзер может кнопками плюс и минус рядом с количеством
-
-        function changeQuantityOfGoodItem($arr, $GoodId, $quantity) {
-            foreach ($arr['items'] as $keyGoods => $goods) {
-                $GoodIdInShoppingBasket = $arr['items'][$keyGoods]['id'];
-                $quantityOfItemInShoppingBasket = $arr['items'][$keyGoods]['quantity'];
-
-                if ($GoodIdInShoppingBasket == $GoodId) {
-                    $arr['items'][$keyGoods]['quantity'] += $quantity;
-                }
+            if(!isset($product) || !is_int($quantity)) {
+                return $cart['errors']['addProduct'] = 'Ошибка добавления товара в корзину';
             }
-            return totalSum($arr);
+
+            if(isset($cart['items'][$id])) {
+                $cart['items'][$id]['quantity'] += $quantity;
+                return totalSum($cart);
+            }
+
+            $cart['items'][$id] = [
+                'id'=> $id,
+                'name' => $product['name'],
+                'price'=> $product['price'],
+                'quantity' => $quantity,
+            ];
+
+            return totalSum($cart);
         }
 
 
-        // Принимает массив корзины,
-        // Скидка расчитывается так:
-        // Если товаров больше, от 10 шт, то скидка 10%.
-        // Если общая стоимость товаров от 2000, то скидка 7%.
-        // Если общая стоимость товаров от 2000 и их количество от 10, то скидка 7%
+        function deleteProduct($cart, $id) {
+            if(isset($cart['items'][$id])) {
+                unset($cart['items'][$id]);
+            } else {
+                return $cart['errors']['deleteProduct'] = 'Ошибка удаления товара из корзины';
+            }
+            return totalSum($cart);
+        }
 
-        function totalSum($arr) {
-            $totalQuantityOfGoods = 0;
-            $totalSumOfGoods = 0;
+
+        function changeQuantityProduct($cart, $id, $quantity) {
+            if(!is_array($cart)) {
+                return $cart['errors']['$changeQuantityProduct'] = 'Ошибка получения массива корзины';
+            }
+
+            if(!isset($cart['items'][$id]) || !is_int($quantity)) {
+                return $cart['errors']['changeQuantityProduct'] = 'Ошибка изменения количества в корзине';
+            }
+
+            $cart['items'][$id]['quantity'] = $quantity;
+
+            return totalSum($cart);
+        }
+
+
+        function changeQuantityByStep($cart, $id, $step) {
+            if(!is_array($cart) || !isset($cart['items'][$id])) {
+                return $cart['errors']['$changeQuantityByStep'] = 'Ошибка получения массива корзины в пошаговом изменении';
+            }
+            
+            if(isset($cart['items'][$id])) {
+                $cart['items'][$id]['quantity'] += $step;
+            }
+
+            if ($cart['items'][$id]['quantity'] == 0) {
+                return deleteProduct($cart, $id);
+            }
+
+            return totalSum($cart);
+        }
+
+
+        function totalSum($cart) {
+            if(!is_array($cart)) {
+                return $cart['errors']['$totalSum'] = 'Ошибка получения массива корзины';
+            }
+            $quantity = 0;
+            $sum = 0;
             $haveDiscount = false;
 
-            foreach ($arr['items'] as $keyGoods => $goods) {
-                $totalQuantityOfGoods += $goods['quantity'];
-                $totalSumForOneItemGood = $goods['quantity'] * $goods['price'];
-                $totalSumOfGoods += $totalSumForOneItemGood;
+            foreach ($cart['items'] as $productId => $product) {
+                $quantity += $product['quantity'];
+                $sumOneItemGood = $product['quantity'] * $product['price'];
+                $sum += $sumOneItemGood;
             }
 
-            if ($totalQuantityOfGoods >= 10 && $totalSumOfGoods >= 2000) {
-                $totalSumOfGoods = $totalSumOfGoods * 0.93;
+            if ($quantity >= 10 && $sum >= 2000) {
+                $sum = $sum * 0.93;
                 $haveDiscount = true;
             }
 
-            if ($totalQuantityOfGoods >= 10 && !$haveDiscount) {
-                $totalSumOfGoods = $totalSumOfGoods * 0.9;
+            if ($quantity >= 10 && !$haveDiscount) {
+                $sum = $sum * 0.9;
                 $haveDiscount = true;
             }
 
-            if ($totalSumOfGoods >= 2000 && !$haveDiscount ) {
-                $totalSumOfGoods = $totalSumOfGoods * 0.93;
+            if ($sum >= 2000 && !$haveDiscount ) {
+                $sum = $sum * 0.93;
                 $haveDiscount = true;
             }
 
-            $arr['sum'] = $totalSumOfGoods;
+            if(!is_int($quantity)) {
+                return $cart['errors']['quantityInTotalSum'] = 'Некорректное значение колисества';
+            }
+            $cart['sum'] = $sum;
             $haveDiscount = false;
 
-            return $arr;
+            return $cart;
         }
 
+        // Вызовы функции для проверки
 
-        // Товары и вызовы функции для проверки
+        $add = addProduct($cart, 7, 1); // дбавление товара
+        $add2 = addProduct($add, 43, 1); // дбавление товара
+        $del = deleteProduct($add2, 2); // удаление товар с id-2
+        $changeStep = changeQuantityByStep($add2, 43, -1); // изменение на одиин шаг количества товара. Будет передаваться 1 или -1
+        $change = changeQuantityProduct($add2, 7, 555); //изменено кол-во товара
+        outputArray($changeStep); // вывод массива после всех децствий
 
-        $newItem = ['id'=>10,'quantity'=>1,'price'=>500]; // товар с небольшими количесвом и ценой
-        $newItem2 = ['id'=>15,'quantity'=>10,'price'=> 10]; // товар  с большим количеством
-        $newItem3 = ['id'=>20,'quantity'=>1,'price'=>2000]; // товар с большой ценой
-        $newItem4 = ['id'=>25,'quantity'=>10,'price'=>2000]; // товар с большими кол-вом и ценой
-
-
-        $addGood = addGoodToShoppingBasket($cart, $newItem4); // Добавлен новый товар
-        $changeQuantity1 = changeQuantityOfGoodItem($addGood, 2, 1); // увеличено кол-во товара на 1 для товара с id-2
-        $deleteGood = deleteGoodFromShoppingBasket($changeQuantity1, 2); // удален товар с id-2
-        outputArray($deleteGood); // Вывод корзины
     ?>
 </body>
 </html>
