@@ -24,7 +24,7 @@
         $_SESSION['cart'] = ['sum' => 0, 'items' =>[]];
     }
 
-     $cart = $_SESSION['cart'];
+    //  $cart = $_SESSION['cart'];
      $errors = [];
 
     if (!empty($_POST)) {
@@ -45,15 +45,22 @@
 
     if (empty($errors)) {
         $product = $products[$product]; // продукт из каталога
-        $cart['sum'] += $product['price'] * $count;
+        $_SESSION['cart']['sum'] += $product['price'] * $count;
         $newProduct = [
             'name' => $product['name'],
             'price' => $product['price'],
             'count' => $count, 
         ];
 
-        // array_push($cart['items'], $newProduct);
-        $cart['items'][] = $newProduct;
+        // array_push($_SESSION['cart']['items'], $newProduct);
+
+        // $_SESSION['cart']['items'][] = $newProduct;
+
+        $_SESSION['cart']['items'][] = [
+            'name' => $product['name'],
+            'price' => $product['price'],
+            'count' => $count, 
+        ];
 
     }
 
@@ -76,15 +83,15 @@
 <body>
     
     <div class="container shop-box">
-        <p class="lead">К оплате <?php echo $cart['sum'];?></p>
+        <p class="lead">К оплате <?php echo $_SESSION['cart']['sum'];?></p>
         <ul class="buy-list">
-            <?php if (!empty($cart['items'])) {
-                foreach ($cart['items'] as $keyItemInCart => $itemInCart) {?>
+            <?php if (!empty($_SESSION['cart']['items'])) {
+                foreach ($_SESSION['cart']['items'] as $keyItemInCart => $itemInCart) {?>
                 <li class="buy-item">
-                    <p class="buy-name"><?php echo $cart['items'][$keyItemInCart]['name']; ?></p>
-                    <p class="buy-quantity"><?php echo $cart['items'][$keyItemInCart]['count']; ?> шт.</p>
-                    <p class="buy-sign"> x </p>
-                    <p class="buy-price"><?php echo $cart['items'][$keyItemInCart]['price']; ?> грн</p>
+                    <p class="buy-name"><?php echo $_SESSION['cart']['items'][$keyItemInCart]['name']; ?></p>
+                    <p class="buy-quantity"><?php echo $_SESSION['cart']['items'][$keyItemInCart]['count']; ?></p>
+                    <!-- <p class="buy-sign"> x </p> -->
+                    <p class="buy-price"><?php echo $_SESSION['cart']['items'][$keyItemInCart]['price']; ?></p>
                 </li>
             <?php } 
              } ?>
