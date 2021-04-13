@@ -1,129 +1,165 @@
 <?php
     session_start();
-
-    // require_once "add.php";
-    // require_once "delete.php";
-    // require_once "list.php";
-
-
-    function outputArray($arr) {
-        echo "<pre>";
-            var_export($arr);
-        echo "<pre>";
-    }
-
-    $products = [
-        2=>['name'=>'товар 1', 'price'=>233],
-        7=>['name'=>'товар 2', 'price'=>333],
-        43=>['name'=>'товар 3', 'price'=>332],
-        50=>['name'=>'товар 4', 'price'=>444],
-    ];
-
-
-    if(isset($_SESSION['cart'])) {
-        $_SESSION['cart'] = ['sum' => 0, 'items' =>[]];
-    }
-
-    //  $cart = $_SESSION['cart'];
-     $errors = [];
-
-    if (!empty($_POST)) {
-        if (isset($_POST['product']) && $_POST['product'] != 0) {
-        $product = $_POST['product'];
-        } else {
-            $errors['product'] = "Выберите товар";
-        }
-    }
-
-    if (!empty($_POST)) {
-        if (isset($_POST['count']) && $_POST['count'] != 0) {
-        $count = $_POST['count'];
-        } else {
-            $errors['count'] = "Укажите количество товара";
-        }
-    }
-
-    if (empty($errors)) {
-        $product = $products[$product]; // продукт из каталога
-        $_SESSION['cart']['sum'] += $product['price'] * $count;
-        $newProduct = [
-            'name' => $product['name'],
-            'price' => $product['price'],
-            'count' => $count, 
-        ];
-
-        // array_push($_SESSION['cart']['items'], $newProduct);
-
-        // $_SESSION['cart']['items'][] = $newProduct;
-
-        $_SESSION['cart']['items'][] = [
-            'name' => $product['name'],
-            'price' => $product['price'],
-            'count' => $count, 
-        ];
-
-    }
-
-    // print_r($product['count']);
-    // outputArray($cart);
-
-
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    <link href="styles-basket.css" rel="stylesheet">
-    <title>Shop, p-2</title>
+    <title>Homework-5, p</title>
+    <style>
+        * {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            padding: 20px
+        }
+        
+    </style>
 </head>
 <body>
-    
-    <div class="container shop-box">
-        <p class="lead">К оплате <?php echo $_SESSION['cart']['sum'];?></p>
-        <ul class="buy-list">
-            <?php if (!empty($_SESSION['cart']['items'])) {
-                foreach ($_SESSION['cart']['items'] as $keyItemInCart => $itemInCart) {?>
-                <li class="buy-item">
-                    <p class="buy-name"><?php echo $_SESSION['cart']['items'][$keyItemInCart]['name']; ?></p>
-                    <p class="buy-quantity"><?php echo $_SESSION['cart']['items'][$keyItemInCart]['count']; ?></p>
-                    <!-- <p class="buy-sign"> x </p> -->
-                    <p class="buy-price"><?php echo $_SESSION['cart']['items'][$keyItemInCart]['price']; ?></p>
-                </li>
-            <?php } 
-             } ?>
-        </ul>
 
-        <form action="" method='POST'>
-            <select select name="product" class="form-select product-select" aria-label="Default select example">
-                <option value="0" selected>Выберите товар</option>
-                    <?php
-                        foreach($products as $keypPoduct => $product) {?>
-                            <option name="name" value=<?php echo $keypPoduct; ?>><?php echo $product['name']; ?></option>
-                    <?php } ?>
-            </select>
+    <?php
+        $products = [
+            2=>['name'=>'товар 1', 'price'=>100],
+            7=>['name'=>'товар 2', 'price'=>200],
+            43=>['name'=>'товар 3', 'price'=>300],
+            50=>['name'=>'товар 4', 'price'=>400],
+        ];
 
-            <div class="row g-3 align-items-center box-quantity">
-                <div class="col-auto">
-                    <label for="count" class="col-form-label">Количество</label>
-                </div>
-                <div class="col-auto">
-                    <input name="count" type="text" id="count" class="form-control" aria-describedby="passwordHelpInline">
-                </div>
-            </div>
 
-            <p class="text-danger">
-                <?php
-                    if (isset($errors['product'])) echo $errors['product'] . "<br>";
-                    if (isset($errors['count'])) echo $errors['count'];
-                ?>
-            </p>
+        $cart = [
+            'sum'=> 0,
+            'items'=> [
+                2=> ['id'=> 2,'name'=>'товар 1', 'price'=>100, 'quantity' => 1,],
+            ],
+            'errors' => [],
+        ];
 
-            <button type="submit" class="btn btn-outline-info btn-buy">Купить</button>
-        </form>
-    </div>
-</body>
-</html>
+
+        function outputArray($arr) {
+            echo "<pre>";
+                var_export($arr);
+            echo "<pre>";
+        }
+
+
+        function addProduct($cart, $id, $quantity) {
+            $product = $GLOBALS['products'][$id];
+            if(!is_array($cart)) {
+                return $cart['errors']['$cart'] = 'Ошибка получения массива корзины';
+            }
+            if(!isset($product)) {
+                return $cart['errors']['addProduct'] = 'Ошибка добавления товара в корзину';
+            }
+
+            if(isset($cart['items'][$id])) {
+                $cart['items'][$id]['quantity'] += $quantity;
+                return totalSum($cart);
+            }
+
+            $cart['items'][$id] = [
+                'id'=> $id,
+                'name' => $product['name'],
+                'price'=> $product['price'],
+                'quantity' => $quantity,
+            ];
+
+            return totalSum($cart);
+        }
+
+
+        function deleteProduct($cart, $id) {
+            if(isset($cart['items'][$id])) {
+                unset($cart['items'][$id]);
+            } else {
+                return $cart['errors']['deleteProduct'] = 'Ошибка удаления товара из корзины';
+            }
+            return totalSum($cart);
+        }
+
+
+        function changeQuantityProduct($cart, $id, $quantity) {
+            if(!is_array($cart)) {
+                return $cart['errors']['$changeQuantityProduct'] = 'Ошибка получения массива корзины';
+            }
+
+            if(!isset($cart['items'][$id]) || !is_int($quantity)) {
+                return $cart['errors']['changeQuantityProduct'] = 'Ошибка изменения количества в корзине';
+            }
+
+            $cart['items'][$id]['quantity'] = $quantity;
+
+            return totalSum($cart);
+        }
+
+
+        function changeQuantityByStep($cart, $id, $step) {
+            if(!is_array($cart) || !isset($cart['items'][$id])) {
+                return $cart['errors']['$changeQuantityByStep'] = 'Ошибка получения массива корзины в пошаговом изменении';
+            }
+            
+            if(isset($cart['items'][$id])) {
+                $cart['items'][$id]['quantity'] += $step;
+            }
+
+            if ($cart['items'][$id]['quantity'] == 0) {
+                return deleteProduct($cart, $id);
+            }
+
+            return totalSum($cart);
+        }
+
+
+        function totalSum($cart) {
+            if(!is_array($cart)) {
+                return $cart['errors']['$totalSum'] = 'Ошибка получения массива корзины';
+            }
+            $quantity = 0;
+            $sum = 0;
+            $haveDiscount = false;
+
+            foreach ($cart['items'] as $productId => $product) {
+                $quantity += $product['quantity'];
+                $sumOneItemGood = $product['quantity'] * $product['price'];
+                $sum += $sumOneItemGood;
+            }
+
+            if ($quantity >= 10 && $sum >= 2000) {
+                $sum = $sum * 0.93;
+                $haveDiscount = true;
+            }
+
+            if ($quantity >= 10 && !$haveDiscount) {
+                $sum = $sum * 0.9;
+                $haveDiscount = true;
+            }
+
+            if ($sum >= 2000 && !$haveDiscount ) {
+                $sum = $sum * 0.93;
+                $haveDiscount = true;
+            }
+
+            if(!is_int($quantity)) {
+                return $cart['errors']['quantityInTotalSum'] = 'Некорректное значение колисества';
+            }
+            $cart['sum'] = $sum;
+            $haveDiscount = false;
+
+            return $cart;
+        }
+
+        // Вызовы функции для проверки
+
+        // $add = addProduct($cart, 7, 1); // дбавление товара
+        // $add2 = addProduct($add, 43, 1); // дбавление товара
+        // $del = deleteProduct($add2, 2); // удаление товар с id-2
+        // $changeStep = changeQuantityByStep($add2, 43, -1); // изменение на одиин шаг количества товара. Будет передаваться 1 или -1
+        // $change = changeQuantityProduct($add2, 7, 555); //изменено кол-во товара
+        // outputArray($changeStep); // вывод массива после всех децствий
+
+    ?>
