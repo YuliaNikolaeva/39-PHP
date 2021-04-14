@@ -48,11 +48,23 @@
 .lead {
     font-size: 20px;
     opacity: .5;
-    margin-bottom: 12px;
+    margin-bottom: 35px;
 }
 
 .cart-list {
     list-style: none;
+}
+
+.cart-item{
+    margin-bottom: 12px;
+}
+
+.name-head {
+    font-size: 20px;
+}
+
+.item-head{
+    font-size: 20px;
 }
 
 .cart-item,
@@ -62,27 +74,27 @@
 
 .cart-item-name,
 .cart-item-name-head {
-    width: 100px;
+    width: 130px;
 }
 
 .cart-item-cost,
 .cart-item-cost-head {
-    width: 100px;
+    width: 130px;
 }
 
 .cart-item-quantity,
 .cart-item-quantity-head {
-    width: 100px;
+    width: 130px;
 }
 
 .cart-item-total,
 .cart-item-total-head {
-    width: 100px;
+    width: 130px;
 }
 
 .cart-total {
-    opacity: .5;
-    margin-bottom: 7px;
+    margin-bottom: 20px;
+    font-size: 20px;
 }
 
 .total{
@@ -91,10 +103,24 @@
 }
 
 .mb-sm {
-    margin-bottom: 7px;
+    margin-bottom: 10px;
 }
 
 .opacity-half {
     opacity: .5;
 
 }
+
+.btn-standard {
+    border: 1px solid #333;
+    display: inline-block;
+    padding: 5px 15px;
+    text-decoration: none;
+    color: #000;
+    margin-bottom: 25px;
+}
+
+.btn-standard:hover {
+    background-color: rgb(228, 228, 228);
+}
+

@@ -18,7 +18,6 @@
         body {
             padding: 20px
         }
-        
     </style>
 </head>
 <body>
@@ -48,82 +47,68 @@
         }
 
 
-        function addProduct($cart, $id, $quantity) {
+        function addProduct($id, $quantity) {
             $product = $GLOBALS['products'][$id];
-            if(!is_array($cart)) {
-                return $cart['errors']['$cart'] = 'Ошибка получения массива корзины';
-            }
             if(!isset($product)) {
-                return $cart['errors']['addProduct'] = 'Ошибка добавления товара в корзину';
+                return  $_SESSION['cart']['errors']['addProduct'] = 'Ошибка добавления товара в корзину';
             }
 
-            if(isset($cart['items'][$id])) {
-                $cart['items'][$id]['quantity'] += $quantity;
-                return totalSum($cart);
+            if(isset($_SESSION['cart']['items'][$id])) {
+                 $_SESSION['cart']['items'][$id]['quantity'] += $quantity;
+                return totalSum();
             }
 
-            $cart['items'][$id] = [
+             $_SESSION['cart']['items'][$id] = [
                 'id'=> $id,
                 'name' => $product['name'],
                 'price'=> $product['price'],
                 'quantity' => $quantity,
             ];
 
-            return totalSum($cart);
+            return totalSum();
         }
 
 
-        function deleteProduct($cart, $id) {
-            if(isset($cart['items'][$id])) {
-                unset($cart['items'][$id]);
+        function deleteProduct($id) {
+            if(isset($_SESSION['cart']['items'][$id])) {
+                unset($_SESSION['cart']['items'][$id]);
             } else {
-                return $cart['errors']['deleteProduct'] = 'Ошибка удаления товара из корзины';
+                return $_SESSION['cart']['errors']['deleteProduct'] = 'Ошибка удаления товара из корзины';
             }
-            return totalSum($cart);
+            return totalSum();
         }
 
 
-        function changeQuantityProduct($cart, $id, $quantity) {
-            if(!is_array($cart)) {
-                return $cart['errors']['$changeQuantityProduct'] = 'Ошибка получения массива корзины';
+        function changeQuantityProduct($id, $quantity) {
+            if(!isset($_SESSION['cart']['items'][$id]) || !is_int($quantity)) {
+                return $_SESSION['cart']['errors']['changeQuantityProduct'] = 'Ошибка изменения количества в корзине';
             }
 
-            if(!isset($cart['items'][$id]) || !is_int($quantity)) {
-                return $cart['errors']['changeQuantityProduct'] = 'Ошибка изменения количества в корзине';
-            }
+            $_SESSION['cart']['items'][$id]['quantity'] = $quantity;
 
-            $cart['items'][$id]['quantity'] = $quantity;
-
-            return totalSum($cart);
+            return totalSum();
         }
 
 
-        function changeQuantityByStep($cart, $id, $step) {
-            if(!is_array($cart) || !isset($cart['items'][$id])) {
-                return $cart['errors']['$changeQuantityByStep'] = 'Ошибка получения массива корзины в пошаговом изменении';
-            }
-            
-            if(isset($cart['items'][$id])) {
-                $cart['items'][$id]['quantity'] += $step;
+        function changeQuantityByStep($id, $step) {
+            if(isset($_SESSION['cart']['items'][$id])) {
+                $_SESSION['cart']['items'][$id]['quantity'] += $step;
             }
 
-            if ($cart['items'][$id]['quantity'] == 0) {
-                return deleteProduct($cart, $id);
+            if ($_SESSION['cart']['items'][$id]['quantity'] == 0) {
+                return deleteProduct($id);
             }
 
-            return totalSum($cart);
+            return totalSum();
         }
 
 
-        function totalSum($cart) {
-            if(!is_array($cart)) {
-                return $cart['errors']['$totalSum'] = 'Ошибка получения массива корзины';
-            }
+        function totalSum() {
             $quantity = 0;
             $sum = 0;
             $haveDiscount = false;
 
-            foreach ($cart['items'] as $productId => $product) {
+            foreach ($_SESSION['cart']['items'] as $productId => $product) {
                 $quantity += $product['quantity'];
                 $sumOneItemGood = $product['quantity'] * $product['price'];
                 $sum += $sumOneItemGood;
@@ -145,21 +130,11 @@
             }
 
             if(!is_int($quantity)) {
-                return $cart['errors']['quantityInTotalSum'] = 'Некорректное значение колисества';
+                return $_SESSION['cart']['errors']['quantityInTotalSum'] = 'Некорректное значение колисества';
             }
-            $cart['sum'] = $sum;
+            $_SESSION['cart']['sum'] = $sum;
             $haveDiscount = false;
 
-            return $cart;
+            return $_SESSION['cart'];
         }
-
-        // Вызовы функции для проверки
-
-        // $add = addProduct($cart, 7, 1); // дбавление товара
-        // $add2 = addProduct($add, 43, 1); // дбавление товара
-        // $del = deleteProduct($add2, 2); // удаление товар с id-2
-        // $changeStep = changeQuantityByStep($add2, 43, -1); // изменение на одиин шаг количества товара. Будет передаваться 1 или -1
-        // $change = changeQuantityProduct($add2, 7, 555); //изменено кол-во товара
-        // outputArray($changeStep); // вывод массива после всех децствий
-
     ?>
