@@ -58,6 +58,12 @@
                 return totalSum();
             }
 
+            if(isset($_SESSION['cart']['items'][$id])) {
+                 $_SESSION['cart']['items'][$id]['quantity'] += $quantity;
+                return totalSum();
+            }
+
+
              $_SESSION['cart']['items'][$id] = [
                 'id'=> $id,
                 'name' => $product['name'],
