@@ -1,0 +1,168 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-style: 'san-serif';
+}
+
+.shop,
+.cart {
+    padding: 20px;
+}
+
+.head {
+    font-size: 20px;
+    opacity: .5;
+    margin-bottom: 15px;
+}
+
+.form-product {
+    width: 300px;
+    margin-bottom: 15px;
+}
+
+.select-product {
+    width: 100%;
+    height: 40px;
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+
+
+.input-quantity {
+    width: 130px;
+    height: 40px;
+    padding-left: 10px;
+    border: 1px solid #000;
+    margin-right: 7px;
+}
+
+.input-quantity::placeholder {
+    padding-left: 10px;
+}
+
+.btn-submit {
+    width: 146px;
+    height: 42px;
+    cursor: pointer;
+}
+
+.lead {
+    font-size: 20px;
+    opacity: .5;
+    margin-bottom: 35px;
+}
+
+.cart-list {
+    list-style: none;
+}
+
+.cart-item{
+    margin-bottom: 12px;
+}
+
+.name-head {
+    font-size: 20px;
+}
+
+.item-head{
+    font-size: 20px;
+}
+
+.cart-item,
+.cart-item-head {
+    display: flex;
+}
+
+.cart-item-name,
+.cart-item-name-head {
+    width: 130px;
+}
+
+.cart-item-cost,
+.cart-item-cost-head {
+    width: 130px;
+}
+
+.cart-item-quantity,
+.cart-item-quantity-head,
+.quantity-box {
+    width: 130px;
+}
+
+.quantity-box {
+    display: flex;
+}
+
+.cart-item-quantity {
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    border: none;
+}
+
+.cart-item-total,
+.cart-item-total-head {
+    width: 130px;
+}
+
+.cart-total {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.total{
+    opacity: 1;
+    font-size: 22px;
+}
+
+.mb-sm {
+    margin-bottom: 10px;
+}
+
+.opacity-half {
+    opacity: .5;
+
+}
+
+.btn-standard {
+    border: 1px solid #333;
+    display: inline-block;
+    padding: 5px 15px;
+    text-decoration: none;
+    color: #000;
+    margin-bottom: 25px;
+}
+
+.btn-standard:hover {
+    background-color: rgb(228, 228, 228);
+}
+
+.empty-cart {
+    opacity: .5;
+    font-size: 22px;
+}
+
+.error-box {
+    color: rgb(207, 40, 40);
+}
+
+.step {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #333;
+    display: inline-block;
+    text-decoration: none;
+    color: #000;
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    cursor: pointer;
+}
+
+.step:hover {
+    background-color: rgb(228, 228, 228);
+}
+
+.plus {
+    padding-top: 3px;
+    height: 21px;
+}
