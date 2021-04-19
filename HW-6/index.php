@@ -28,13 +28,11 @@
         public function addToExemplar ($id, $quantity) {
             $product = $GLOBALS['products'][$id];
 
-             $this->items = [
-                $id => [
-                    'id'=> $id,
-                    'name' => $product['name'],
-                    'price'=> $product['price'],
-                    'quantity' => $quantity,
-                ]
+            $this->items[$id]= [
+                'id'=> $id,
+                'name' => $product['name'],
+                'price'=> $product['price'],
+                'quantity' => $quantity,
             ];
         }
 
