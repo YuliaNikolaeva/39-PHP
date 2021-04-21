@@ -35,8 +35,8 @@
             <form action="" method='POST' class="form-login">
                 <div class="input-box">
                     <input type="hidden" name="tokenFormLogin" value="<?php echo(rand());?>" />
-                    <input name="email" type="text" required  class="input-email" placeholder="Email"></input>
-                    <input name="pass" type="text" required  class="input-pass" placeholder="Пароль"></input>
+                    <input name="email" type="email" required  class="input-email" placeholder="Email"></input>
+                    <input name="pass" type="password" required  class="input-pass" placeholder="Пароль"></input>
                     <input type="submit" value="Войти" required class="btn-submit btn-buy"></input>
                 </div>
             </form>
