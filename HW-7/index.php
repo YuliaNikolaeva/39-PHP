@@ -1,6 +1,6 @@
 <?php 
-    include_once 'init.php';
-    // op($base);
+
+    include_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 
     if (($_POST['tokenFormLogin'] != $_SESSION['lasttokenFormLogin']) && isset($_POST['login']) && isset($_POST['pass'])) {
         $newUser;
@@ -16,15 +16,12 @@
                         break;
                     case "client":
                        $newUser = new Client($key);
+                       op($newUser);
                        break;
                 }
             }
         }
     }
-
-    // op($newUser);
-
-
 ?>
 
 <!DOCTYPE html>

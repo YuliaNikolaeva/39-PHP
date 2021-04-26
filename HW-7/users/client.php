@@ -1,8 +1,9 @@
 <?php
-    include_once '../init.php';
+    include_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
 
     op($base);
-  
+
+ 
     class Client extends User {
             public function __construct($id) {
             $user = $base['id'];
