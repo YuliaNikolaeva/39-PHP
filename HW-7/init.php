@@ -15,7 +15,7 @@
 
     $base = $users;
 
-    function op(&$arr) {
+    function op($arr) {
         echo "<pre>";
             var_export($arr);
         echo "<pre>";

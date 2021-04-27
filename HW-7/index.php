@@ -4,7 +4,6 @@
     $newUser;
 
     if (($_POST['tokenFormLogin'] != $_SESSION['lasttokenFormLogin']) && isset($_POST['login']) && isset($_POST['pass'])) {
-        
 
         foreach($base as $key => $user) {
             if ($user['login'] == $_POST['login'] && $user['password'] == $_POST['pass']) {
@@ -23,7 +22,16 @@
         }
     }
 
-    op($newUser);
+        op($GLOBALS['newUser']);
+        // echo "<pre>";
+        //     var_export($newUser);
+        // echo "<pre>";
+
+        echo "<pre>";
+            var_export($newUser->getMessage);
+        echo "<pre>";
+
+    // op($newUser);
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +41,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="styles.css" rel="stylesheet">
-    <title>HW-6, Главная</title>
+    <title>HW-7, Главная</title>
     <style>
         * {
             font-family: sans-serif;
