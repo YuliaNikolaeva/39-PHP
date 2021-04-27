@@ -22,14 +22,14 @@
         }
     }
 
-        op($GLOBALS['newUser']);
+        // op($GLOBALS['newUser']);
         // echo "<pre>";
         //     var_export($newUser);
         // echo "<pre>";
 
-        echo "<pre>";
-            var_export($newUser->getMessage);
-        echo "<pre>";
+        // echo "<pre>";
+        //     var_export($newUser->message);
+        // echo "<pre>";
 
     // op($newUser);
 ?>
@@ -53,10 +53,7 @@
 <body>
     <section class="login">
         <?php if (isset($user)): ?>
-            <!-- <div class="hello">
-                <p>Здравствуйте, <?php echo $user['role'] . " " . $user['name'] . " " . $user['surname']?></p>
-                <p>Вы можете на сайте изменять, удалять и создавать клиентов</p>
-            </div> -->
+            <div class="hello"><?php echo $newUser->message ?></div>
         <?php else: ?> 
             <h2 class='head'>Страница авторизации</h2>
             <form action="" method='POST' class="form-login">

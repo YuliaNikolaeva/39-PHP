@@ -8,10 +8,6 @@
         public $role;
         public $message;
         public $errors;
-
-        public function getMessage() {
-            return $this->message;
-        }
     }
 ?>
 
@@ -24,6 +20,6 @@
     <title>Класс Юзер</title>
 </head>
 <body>
-    Страница класса юзера
+    Это класс юзера
 </body>
 </html>

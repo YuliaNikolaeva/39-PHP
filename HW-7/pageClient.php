@@ -1,6 +1,6 @@
 <?php
     include_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
-     $user = $GLOBALS['newUser'];
+    //  $user = $GLOBALS['newUser'];
      op($GLOBALS);
 ?>
 <!DOCTYPE html>
