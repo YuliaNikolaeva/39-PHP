@@ -1,9 +1,10 @@
 <?php 
 
     include_once($_SERVER['DOCUMENT_ROOT'].'/init.php');
+    $newUser;
 
     if (($_POST['tokenFormLogin'] != $_SESSION['lasttokenFormLogin']) && isset($_POST['login']) && isset($_POST['pass'])) {
-        $newUser;
+        
 
         foreach($base as $key => $user) {
             if ($user['login'] == $_POST['login'] && $user['password'] == $_POST['pass']) {
@@ -16,12 +17,13 @@
                         break;
                     case "client":
                        $newUser = new Client($key);
-                       op($newUser);
                        break;
                 }
             }
         }
     }
+
+    op($newUser);
 ?>
 
 <!DOCTYPE html>
